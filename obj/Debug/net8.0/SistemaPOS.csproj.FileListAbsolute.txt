@@ -282,3 +282,12 @@ C:\Users\Ces\source\repos\SistemaPOS\obj\Debug\net8.0\refint\SistemaPOS.dll
 C:\Users\Ces\source\repos\SistemaPOS\obj\Debug\net8.0\SistemaPOS.pdb
 C:\Users\Ces\source\repos\SistemaPOS\obj\Debug\net8.0\SistemaPOS.genruntimeconfig.cache
 C:\Users\Ces\source\repos\SistemaPOS\obj\Debug\net8.0\ref\SistemaPOS.dll
+C:\Users\Ces\source\repos\SistemaPOS\obj\Debug\net8.0\SistemaPOS.sourcelink.json
+C:\Users\Ces\source\repos\SistemaPOS\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Ces\source\repos\SistemaPOS\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\Users\Ces\source\repos\SistemaPOS\bin\Debug\net8.0\System.Security.Permissions.dll
+C:\Users\Ces\source\repos\SistemaPOS\bin\Debug\net8.0\System.Windows.Extensions.dll
+C:\Users\Ces\source\repos\SistemaPOS\bin\Debug\net8.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Ces\source\repos\SistemaPOS\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
+C:\Users\Ces\source\repos\SistemaPOS\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Ces\source\repos\SistemaPOS\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll

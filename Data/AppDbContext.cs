@@ -10,5 +10,6 @@ namespace SistemaPOS.Data
            : base(options)
         {
         }
+        public DbSet<SistemaPOS.Models.Cliente> Cliente { get; set; } = default!;
     }
 }

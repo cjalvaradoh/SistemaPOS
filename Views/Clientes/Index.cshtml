@@ -1,0 +1,68 @@
+﻿@model IEnumerable<SistemaPOS.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutLogged";
+}
+
+<h1>Clientes</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-sm" style="background-color: #1077d8; color: white;">
+        <i class="bi bi-plus-circle"></i> Crear Nuevo
+    </a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Nit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.ClienteId" class="btn btn-sm" style="background-color: #fcc014; color: white;">
+                        <i class="bi bi-pencil-fill"></i> Editar
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.ClienteId" class="btn btn-sm" style="background-color: #128cff; color: white;">
+                        <i class="bi bi-info-circle"></i> Detalles
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.ClienteId" class="btn btn-sm" style="background-color: #ea2613; color: white;">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
