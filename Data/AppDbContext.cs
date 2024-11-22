@@ -10,6 +10,12 @@ namespace SistemaPOS.Data
            : base(options)
         {
         }
+
         public DbSet<SistemaPOS.Models.Cliente> Cliente { get; set; } = default!;
+        public DbSet<SistemaPOS.Models.Empleado> Empleado { get; set; } = default!;
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
