@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SistemaPOS.Data;
 using SistemaPOS.Models;
+using static SistemaPOS.Controllers.HomeController;
 
 namespace SistemaPOS
 {
@@ -59,6 +60,9 @@ namespace SistemaPOS
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Auth}/{action=Login}/{id?}");
+
+            
+
 
 
             app.UseSession();

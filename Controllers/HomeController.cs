@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SistemaPOS.Models;
 using System.Diagnostics;
@@ -26,7 +27,12 @@ namespace SistemaPOS.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+       
+
+
+
+
+    public IActionResult Privacy()
         { 
             return View();
         }

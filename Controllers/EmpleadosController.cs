@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SistemaPOS.Data;
 using SistemaPOS.Models;
-using Microsoft.AspNetCore.Identity; 
 
 namespace SistemaPOS.Controllers
 {
@@ -19,11 +15,14 @@ namespace SistemaPOS.Controllers
         {
             _context = context;
         }
+
+        // GET: Empleados
         public async Task<IActionResult> Index()
         {
             return View(await _context.Empleado.ToListAsync());
         }
 
+        // GET: Empleados/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,27 +39,45 @@ namespace SistemaPOS.Controllers
 
             return View(empleado);
         }
+
+        // GET: Empleados/Create
         public IActionResult Create()
         {
+            // Cargar la lista de usuarios para el desplegable
+            ViewData["Usuarios"] = new SelectList(_context.Users, "Id", "UserName");
             return View();
         }
 
+        // POST: Empleados/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmpleadoId,Nombre,Apellido,Dpi,Cargo,Usuario,Contraseña")] Empleado empleado)
+        public async Task<IActionResult> Create([Bind("EmpleadoId,Nombre,Apellido,Dpi,Cargo,UsuarioId")] Empleado empleado)
         {
             if (ModelState.IsValid)
             {
-                
-                var passwordHasher = new PasswordHasher<Empleado>();
-                empleado.Contraseña = passwordHasher.HashPassword(empleado, empleado.Contraseña);
+                // Asignar un usuario por defecto si no se selecciona ninguno
+                if (empleado.UsuarioId == null)
+                {
+                    var usuario = await _context.Users.FirstOrDefaultAsync();
+                    if (usuario == null)
+                    {
+                        ModelState.AddModelError("", "No hay usuarios disponibles para asignar a este empleado.");
+                        return View(empleado);
+                    }
+                    empleado.UsuarioId = usuario.Id;
+                }
 
                 _context.Add(empleado);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            
+            ViewData["Usuarios"] = new SelectList(_context.Users, "Id", "UserName", empleado.UsuarioId);
             return View(empleado);
         }
+
+        // GET: Empleados/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,12 +90,16 @@ namespace SistemaPOS.Controllers
             {
                 return NotFound();
             }
+
+            // Cargar la lista de usuarios para el desplegable
+            ViewData["Usuarios"] = new SelectList(_context.Users, "Id", "UserName", empleado.UsuarioId);
             return View(empleado);
         }
 
+        // POST: Empleados/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmpleadoId,Nombre,Apellido,Dpi,Cargo,Usuario,Contraseña")] Empleado empleado)
+        public async Task<IActionResult> Edit(int id, [Bind("EmpleadoId,Nombre,Apellido,Dpi,Cargo,UsuarioId")] Empleado empleado)
         {
             if (id != empleado.EmpleadoId)
             {
@@ -89,9 +110,6 @@ namespace SistemaPOS.Controllers
             {
                 try
                 {
-                    var passwordHasher = new PasswordHasher<Empleado>();
-                    empleado.Contraseña = passwordHasher.HashPassword(empleado, empleado.Contraseña);
-
                     _context.Update(empleado);
                     await _context.SaveChangesAsync();
                 }
@@ -108,8 +126,13 @@ namespace SistemaPOS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            // Recargar la lista de usuarios si algo falla
+            ViewData["Usuarios"] = new SelectList(_context.Users, "Id", "UserName", empleado.UsuarioId);
             return View(empleado);
         }
+
+        // GET: Empleados/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,6 +150,7 @@ namespace SistemaPOS.Controllers
             return View(empleado);
         }
 
+        // POST: Empleados/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -135,11 +159,12 @@ namespace SistemaPOS.Controllers
             if (empleado != null)
             {
                 _context.Empleado.Remove(empleado);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
 
         private bool EmpleadoExists(int id)
         {
