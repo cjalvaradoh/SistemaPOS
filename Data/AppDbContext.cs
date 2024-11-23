@@ -12,7 +12,9 @@ namespace SistemaPOS.Data
         }
 
         public DbSet<Empleado> Empleado { get; set; }
-        
+        public DbSet<Producto> Producto { get; set; }
+
+
         public DbSet<Cliente> Cliente { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,5 +23,6 @@ namespace SistemaPOS.Data
 
             
         }
+        
     }
 }
