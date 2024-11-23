@@ -34,52 +34,31 @@ namespace SistemaPOS.Controllers
         // POST: Productos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductoId,Codigo,Nombre,Descripcion,Precio,Stock,FotoUrl")] Producto producto, IFormFile Imagen)
+        public async Task<IActionResult> Create([Bind("ProductoId,Codigo,Nombre,Descripcion,Precio,Stock")] Producto producto, IFormFile FotoUrl)
         {
             if (ModelState.IsValid)
             {
-                if (Imagen != null && Imagen.Length > 0)
+                if (FotoUrl != null)
                 {
-                    try
+                    var uploadParams = new ImageUploadParams()
                     {
-                        // Subir la imagen a Cloudinary
-                        var uploadParams = new ImageUploadParams
-                        {
-                            File = new FileDescription(Imagen.FileName, Imagen.OpenReadStream()),
-                            Folder = "productos" // Carpeta dentro de tu cuenta de Cloudinary
-                        };
+                        File = new FileDescription(FotoUrl.FileName, FotoUrl.OpenReadStream()),
+                        Transformation = new Transformation().Width(500).Height(500).Crop("fill")
+                    };
 
-                        var uploadResult = _cloudinary.Upload(uploadParams);
+                    var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                    producto.FotoUrl = uploadResult.SecureUrl.ToString();
 
-                        // Validar si la subida fue exitosa
-                        if (uploadResult != null && uploadResult.Url != null)
-                        {
-                            producto.FotoUrl = uploadResult.Url.ToString(); // Guardar la URL en el modelo
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", "No se pudo subir la imagen a Cloudinary.");
-                            return View(producto); // Devolver a la vista con el error
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Manejo de errores en la subida de la imagen
-                        ModelState.AddModelError("", $"Error al subir la imagen: {ex.Message}");
-                        return View(producto); // Devolver a la vista con el error
-                    }
+                    var thumbnailParams = new Transformation().Width(150).Height(150).Crop("thumb");
+                    producto.thumbnail_url = _cloudinary.Api.UrlImgUp.Transform(thumbnailParams).BuildUrl(uploadResult.PublicId);
                 }
-
-                // Guardar el producto en la base de datos
                 _context.Add(producto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si el modelo no es válido, regresar a la vista con los errores
             return View(producto);
         }
-
 
     }
 }

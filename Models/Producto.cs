@@ -31,7 +31,9 @@ namespace SistemaPOS.Models
         public int Stock { get; set; }
 
         [Column("foto_url")]
-        public string FotoUrl { get; set; }
+        public string? FotoUrl { get; set; }
 
+        [Column("thumbnail_url")]
+        public string? thumbnail_url { get; set; }
     }
 }

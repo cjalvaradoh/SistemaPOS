@@ -22,14 +22,6 @@ namespace SistemaPOS
                 options.UseSqlServer(connectionString));
 
 
-
-            // Configuración de Cloudinary
-            builder.Services.AddSingleton(new Cloudinary(new Account(
-                "dz1tmytgp", 
-                "631954382685321",    
-                "Zp2ffLHhBlo-aBZBuaFQhZ9dQ8s"  
-            )));
-
             // Agregar Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
@@ -41,6 +33,14 @@ namespace SistemaPOS
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+
+            var cloudinaryAccount = new Account(
+                Environment.GetEnvironmentVariable("CLOUDINARY_NAME"),
+                Environment.GetEnvironmentVariable("CLOUDINARY_API_KEY"),
+                Environment.GetEnvironmentVariable("CLOUDINARY_API_SECRET")
+            );
+
+            builder.Services.AddSingleton(new Cloudinary(cloudinaryAccount));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
