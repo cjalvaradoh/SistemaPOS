@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ryph3GPlzF48iQ7Ot+iFwPrFSCOUfkk18HvaL0vyOes=",
+  "Hash": "D1YGIOm51QlqbTkKIhh57HKw1riUgt5qSB66Li7Usm0=",
   "Source": "SistemaPOS",
   "BasePath": "_content/SistemaPOS",
   "Mode": "Default",
@@ -110,6 +110,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\css\\stylesPos.css",
+      "SourceId": "SistemaPOS",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\",
+      "BasePath": "_content/SistemaPOS",
+      "RelativePath": "css/stylesPos.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\stylesPos.css"
     },
     {
       "Identity": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\favicon.ico",
@@ -319,6 +338,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\cube_logo_white.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\js\\carrito.js",
+      "SourceId": "SistemaPOS",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\",
+      "BasePath": "_content/SistemaPOS",
+      "RelativePath": "js/carrito.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\carrito.js"
     },
     {
       "Identity": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\js\\site.js",

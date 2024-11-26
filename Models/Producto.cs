@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaPOS.Models
 {
-    [Table("productos")] // Coincide con la tabla en SQL
+    [Table("productos")] 
     public class Producto
     {
         [Key]
@@ -30,10 +30,11 @@ namespace SistemaPOS.Models
         [Column("stock")]
         public int Stock { get; set; }
 
-        [Column("foto_url")]
+		[Column("thumbnail_url")]
+		public string? thumbnail_url { get; set; }
+
+		[Column("foto_url")]
         public string? FotoUrl { get; set; }
 
-        [Column("thumbnail_url")]
-        public string? thumbnail_url { get; set; }
     }
 }

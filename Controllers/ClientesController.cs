@@ -86,38 +86,39 @@ namespace SistemaPOS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClienteId,Nit,Nombre,Apellido,Direccion,Telefono")] Cliente cliente)
-        {
-            if (id != cliente.ClienteId)
-            {
-                return NotFound();
-            }
+		public async Task<IActionResult> Edit(int id, [Bind("ClienteId,Nit,Nombre,Apellido,Direccion,Telefono")] Cliente cliente)
+		{
+			if (id != cliente.ClienteId)
+			{
+				return NotFound();
+			}
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cliente);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ClienteExists(cliente.ClienteId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(cliente);
-        }
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					_context.Update(cliente);
+					await _context.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!ClienteExists(cliente.ClienteId))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+				return RedirectToAction(nameof(Index));
+			}
+			return View(cliente);
+		}
 
-        // GET: Clientes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+		// GET: Clientes/Delete/5
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -149,9 +150,10 @@ namespace SistemaPOS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClienteExists(int id)
-        {
-            return _context.Cliente.Any(e => e.ClienteId == id);
-        }
-    }
+		private bool ClienteExists(int id)
+		{
+			return _context.Cliente.Any(e => e.ClienteId == id);
+		}
+
+	}
 }

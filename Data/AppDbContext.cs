@@ -10,17 +10,15 @@ namespace SistemaPOS.Data
            : base(options)
         {
         }
-
-        public DbSet<Empleado> Empleado { get; set; }
+		public DbSet<Cliente> Cliente { get; set; }
+		public DbSet<Venta> Venta { get; set; }
+		public DbSet<DetalleVenta> DetallesVenta { get; set; }
+		public DbSet<Empleado> Empleado { get; set; }
         public DbSet<Producto> Producto { get; set; }
 
-
-        public DbSet<Cliente> Cliente { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             
         }
         

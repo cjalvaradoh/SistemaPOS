@@ -1,20 +1,34 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SistemaPOS.DTOs;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaPOS.Models
 {
-    public class Venta
-    {
-        public int VentaId { get; set; }
+	[Table("ventas")]
+	public class Venta
+	{
+		[Column("venta_id")]
+		public int? Id { get; set; }
 
-        [Required]
-        public DateTime Fecha { get; set; } = DateTime.Now;
+		[Column("fecha")]
+		public DateTime Fecha { get; set; }
 
-        public int? ClienteId { get; set; }
-        public virtual Cliente Cliente { get; set; }
+		[Column("total")]
+		public decimal Total { get; set; }
 
-        [Required]
-        [Range(0, double.MaxValue)]
-        public decimal Total { get; set; }
-    }
+		[Column("cliente_id")]
+		public int ClienteId { get; set; }
+
+		[ForeignKey("ClienteId")]
+		public Cliente? Cliente { get; set; } // Relacion de uno a uno
+
+		[Column("empleado_id")]
+		public int EmpleadoId { get; set; }
+
+		[ForeignKey("EmpleadoId")]
+		public Empleado? Empleado { get; set; } // Relacion de uno a uno
+		public ICollection<DetalleVenta> DetallesVenta { get; set; }
+
+	}
 
 }

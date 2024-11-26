@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
+      "Id": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\css\\stylesPos.css",
+      "PackagePath": "staticwebassets\\css\\stylesPos.css"
+    },
+    {
       "Id": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
@@ -51,6 +55,10 @@
     {
       "Id": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\images\\cube_logo_white.jpg",
       "PackagePath": "staticwebassets\\images\\cube_logo_white.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\js\\carrito.js",
+      "PackagePath": "staticwebassets\\js\\carrito.js"
     },
     {
       "Id": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\js\\site.js",

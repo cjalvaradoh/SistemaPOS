@@ -166,9 +166,10 @@ namespace SistemaPOS.Controllers
 
 
 
-        private bool EmpleadoExists(int id)
-        {
-            return _context.Empleado.Any(e => e.EmpleadoId == id);
-        }
-    }
+		private bool EmpleadoExists(int id)
+		{
+			return _context.Empleado.Any(e => e.EmpleadoId == id);
+		}
+
+	}
 }
