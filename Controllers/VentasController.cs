@@ -286,7 +286,7 @@ namespace SistemaPOS.Controllers
 			{
 				Fecha = DateTime.Now,
 				ClienteId = ventaDto.ClienteId,
-				EmpleadoId =  ventaDto.EmpleadoId, 
+				EmpleadoId = ventaDto.EmpleadoId,
 				Total = ventaDto.Detalles.Sum(d => d.Cantidad * d.PrecioUnitario)
 			};
 
