@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -23,7 +22,7 @@ namespace SistemaPOS.Controllers
 			return View();
 		}
 
-		public IActionResult ImprimirFactura(long id)
+		public IActionResult ImprimirFactura(long id,string nitCliente)
 		{
 			QuestPDF.Settings.License = LicenseType.Community;
 
@@ -38,6 +37,8 @@ namespace SistemaPOS.Controllers
 				return NotFound();
 			}
 
+			// Si nitCliente es "CF", mostrar "CF" en la factura
+			string clienteNit = nitCliente == "CF" ? "CF" : venta.Cliente?.Nit;
 			var logo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/icons/apple-touch-icon-180x180.png");
 			var monedaGuatemala = new System.Globalization.CultureInfo("es-GT");
 
@@ -116,7 +117,7 @@ namespace SistemaPOS.Controllers
 
 						column.Item().Row(row =>
 						{
-							row.RelativeItem().Text($"NIT: {venta.Cliente?.Nit}");
+							row.RelativeItem().Text($"NIT: {clienteNit}");
 						});
 
 						column.Item().PaddingVertical(5, Unit.Millimetre);
@@ -265,37 +266,71 @@ namespace SistemaPOS.Controllers
 		[HttpPost]
 		public async Task<IActionResult> CrearVenta([FromBody] VentaDTO ventaDto)
 		{
+			// Validar datos de entrada
 			if (ventaDto == null || ventaDto.Detalles == null || !ventaDto.Detalles.Any())
 			{
-				return BadRequest("Datos de la venta invalidos");
+				return BadRequest("Datos de la venta inválidos.");
 			}
 
+			// Buscar empleado
 			var empleado = await _context.Empleado.FindAsync(ventaDto.EmpleadoId);
 			if (empleado == null)
 			{
-				return BadRequest("El empleado seleccionado no existe");
+				return BadRequest("El empleado seleccionado no existe.");
 			}
 
-			var cliente = await _context.Cliente.FindAsync(ventaDto.ClienteId);
-			if (cliente == null)
+			// Validación cliente: Si el cliente es "CF" (Consumidor Final), no hace falta seleccionar cliente
+			if (ventaDto.ClienteId != null)
 			{
-				return BadRequest("El cliente seleccionado no existe");
+				var cliente = await _context.Cliente.FindAsync(ventaDto.ClienteId);
+				if (cliente == null)
+				{
+					return BadRequest("El cliente seleccionado no existe.");
+				}
+
+				// Asignar el NIT del cliente si se encuentra
+				ventaDto.NitCliente = cliente.Nit;
+			}
+			else if (string.IsNullOrEmpty(ventaDto.NitCliente) || ventaDto.NitCliente != "CF")
+			{
+				return BadRequest("Debe seleccionar un cliente o utilizar el NIT de CF.");
 			}
 
+			// Crear la nueva venta
 			Venta nuevaVenta = new Venta
 			{
 				Fecha = DateTime.Now,
-				ClienteId = ventaDto.ClienteId,
+				ClienteId = ventaDto.ClienteId,  // Puede ser null si es CF
 				EmpleadoId = ventaDto.EmpleadoId,
 				Total = ventaDto.Detalles.Sum(d => d.Cantidad * d.PrecioUnitario)
 			};
 
+			// Guardar la venta
 			_context.Venta.Add(nuevaVenta);
 			await _context.SaveChangesAsync();
 
-			foreach (DetalleVentaDTO detalleDto in ventaDto.Detalles)
+			// Actualizar el inventario y registrar los detalles de la venta
+			foreach (var detalleDto in ventaDto.Detalles)
 			{
-				var detalle = new DetalleVenta
+				var producto = await _context.Producto.FindAsync(detalleDto.ProductoId);
+				if (producto == null)
+				{
+					return BadRequest("Producto no encontrado.");
+				}
+
+				// Reducir el stock del producto
+				producto.Stock -= detalleDto.Cantidad;
+
+				// Validar que no haya un stock negativo
+				if (producto.Stock < 0)
+				{
+					return BadRequest($"No hay suficiente stock de {producto.Nombre}. Solo quedan {producto.Stock + detalleDto.Cantidad} unidades.");
+				}
+
+				_context.Producto.Update(producto);
+
+				// Crear los detalles de la venta
+				var detalleVenta = new DetalleVenta
 				{
 					VentaId = nuevaVenta.Id.Value,
 					ProductoId = detalleDto.ProductoId,
@@ -303,11 +338,13 @@ namespace SistemaPOS.Controllers
 					PrecioUnitario = detalleDto.PrecioUnitario
 				};
 
-				_context.DetallesVenta.Add(detalle);
+				_context.DetallesVenta.Add(detalleVenta);
 			}
 
+			// Guardar todos los cambios en la base de datos
 			await _context.SaveChangesAsync();
 
+			// Retornar el ID de la venta creada
 			return Ok(new { VentaId = nuevaVenta.Id });
 		}
 	}

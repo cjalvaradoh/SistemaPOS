@@ -69,17 +69,18 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form id="formularioFinalizar Compra">
+				<form id="formularioFinalizarCompra">
 					<div class="mb-3">
 						<label for="cliente" class="form-label">Seleccione al Cliente</label>
-						<select class="form-select" id="cliente" name="cliente" required>
+						<select class="form-select" id="cliente" name="cliente" required onchange="actualizarNit()">
 							<option value="">Seleccione ...</option>
 							@foreach (var cliente in ViewBag.Clientes as List<SistemaPOS.Models.Cliente>)
 							{
-								<option value="@cliente.ClienteId">@cliente.Nombre</option>
+								<option value="@cliente.ClienteId" data-nit="@cliente.Nit">@cliente.Nombre</option>
 							}
 						</select>
 					</div>
+
 					<div class="mb-3">
 						<label for="empleado" class="form-label">Seleccione al Empleado</label>
 						<select class="form-select" id="empleado" name="empleado" required>
@@ -90,11 +91,17 @@
 							}
 						</select>
 					</div>
+					<!-- Input de NIT -->
+					<input type="text" id="nit" placeholder="NIT del cliente" readonly />
+					<!-- Checkbox para seleccionar CF -->
+					<label>
+					<input type="checkbox" id="usarCF" /> Usar NIT de Consumidor Final (CF)
+					</label>
 				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-				<button type="button" class="btn btn-primary" id="botonFinalizarCompra">Finalizar</button>
+				<button type="button" class="btn btn-primary" id="botonFinalizarCompra" onclick="finalizarCompra()">Finalizar</button>
 			</div>
 		</div>
 	</div>
@@ -125,7 +132,19 @@
 
 	// Agregar eventos al botón y al campo de texto
 	searchButton.addEventListener('click', filtrarProductos); 
-	// searchInput.addEventListener('input', filtrarProductos);  // Buscar mientras se escribe
+    searchInput.addEventListener('input', filtrarProductos);  // Buscar mientras se escribe
+
+	document.getElementById('usarCF').addEventListener('change', function () {
+    const nitInput = document.getElementById('nit');
+    if (this.checked) {
+        nitInput.value = "CF";
+        nitInput.readOnly = true; // Evitar que el usuario lo modifique
+    } else {
+        nitInput.value = ''; // Limpiar el campo si se desmarca
+        nitInput.readOnly = false;
+    }
+	});
+
 
 
 	let carrito = [];
@@ -140,19 +159,19 @@
 			const nuevoElemento = document.createElement('div');
 			nuevoElemento.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center')
 			nuevoElemento.innerHTML = `
-					${item.nombre}
-					<span class="badge bg-primary rounded-pill">
-						${item.cantidad} x Q.${item.precio.toFixed(2)} = Q.${(item.cantidad * item.precio).toFixed(2)}
-					</span>
-					<div>
-						<button class="btn btn-sm btn-secondary decrement-item" data-id="${item.id}">
-							<i class="bi bi-dash-circle"></i>
-						</button>
-							<button class="btn btn-sm btn-danger remove-item" data-id="${item.id}">
-							<i class="bi bi-trash"></i>
-						</button>
-					</div>
-				`
+						${item.nombre}
+						<span class="badge bg-primary rounded-pill">
+							${item.cantidad} x Q.${item.precio.toFixed(2)} = Q.${(item.cantidad * item.precio).toFixed(2)}
+						</span>
+						<div>
+							<button class="btn btn-sm btn-secondary decrement-item" data-id="${item.id}">
+								<i class="bi bi-dash-circle"></i>
+							</button>
+								<button class="btn btn-sm btn-danger remove-item" data-id="${item.id}">
+								<i class="bi bi-trash"></i>
+							</button>
+						</div>
+					`
 			contenedorCarrito.appendChild(nuevoElemento)
 			total += item.cantidad * item.precio
 		})
@@ -199,48 +218,50 @@
 	});
 
 	document.getElementById('botonFinalizarCompra').addEventListener('click', async () => {
-		const clienteId = document.getElementById('cliente').value;
-		const empleadoId = document.getElementById('empleado').value;  // Obtener el empleado seleccionado
+    const clienteId = document.getElementById('cliente').value;
+    const empleadoId = document.getElementById('empleado').value;
+    let nitCliente = document.getElementById('nit').value;
 
-		if (!clienteId) {
-			alert('Seleccione un cliente');
-			return;
-		}
+    // Validar si el cliente es CF
+    if (!clienteId && nitCliente.trim() === "") {
+        alert('Debe seleccionar un cliente o ingresar un NIT válido.');
+        return;
+    }
 
-		if (!empleadoId) {
-			alert('Seleccione un empleado');
-			return;
-		}
+    // Si no se ingresa NIT, asignamos "CF"
+    if (!nitCliente) {
+        nitCliente = "CF"; // Asignar CF si el cliente es Consumidor Final
+    }
 
-		const venta = {
-			clienteId,
-			empleadoId,  // Asegurarse de que se envíe el empleado seleccionado
-			detalles: carrito.map(item => ({
-				productoId: item.id,
-				cantidad: item.cantidad,
-				precioUnitario: item.precio
-			}))
-		};
+    const venta = {
+        clienteId: clienteId || null,
+        empleadoId: empleadoId,
+        nitCliente: nitCliente,  // Enviar el NIT o "CF"
+        detalles: carrito.map(item => ({
+            productoId: item.id,
+            cantidad: item.cantidad,
+            precioUnitario: item.precio
+        }))
+    };
 
-		try {
-			const response = await fetch('/Ventas/CrearVenta', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(venta)
-			});
+    try {
+        const response = await fetch('/Ventas/CrearVenta', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(venta)
+        });
 
-			if (response.ok) {
-				const responseJson = await response.json();
-				alert('Venta finalizada con éxito. Código de venta: ' + responseJson.ventaId);
-				window.location.href = `/Ventas/ImprimirFactura/${responseJson.ventaId}`;
-			} else {
-				alert('Error al finalizar la compra.');
-			}
-
-		} catch (error) {
-			console.log(error);
-			alert('Error al finalizar la compra.');
-		}
-	});
+        if (response.ok) {
+            const responseJson = await response.json();
+            alert('Venta finalizada con éxito. Código de venta: ' + responseJson.ventaId);
+            window.location.href = `/Ventas/ImprimirFactura/${responseJson.ventaId}?nitCliente=${venta.nitCliente}`;  // Pasar nitCliente como parámetro
+        } else {
+            alert('Error al finalizar la compra.');
+        }
+    } catch (error) {
+        console.log(error);
+        alert('Error al finalizar la compra.');
+    }
+});
 
 </script>
