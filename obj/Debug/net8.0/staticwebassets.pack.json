@@ -53,6 +53,10 @@
       "PackagePath": "staticwebassets\\icons\\apple-touch-icon.png"
     },
     {
+      "Id": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\images\\banner.jpg",
+      "PackagePath": "staticwebassets\\images\\banner.jpg"
+    },
+    {
       "Id": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\images\\cube_logo_white.jpg",
       "PackagePath": "staticwebassets\\images\\cube_logo_white.jpg"
     },

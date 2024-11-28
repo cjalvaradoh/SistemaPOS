@@ -5,106 +5,122 @@
 }
 
 <div class="container my-4">
-	<h1 class="text-center">Punto de Venta</h1>
+    <h1 class="text-center text-dark mb-4">PUNTO DE VENTA</h1>
+    <link rel="stylesheet" href="~/css/stylesPos.css" asp-append-version="true" />
+    <img src="~/images/banner.jpg" alt="Banner de Punto de Venta" class="banner-img">
 
-	<div class="row">
-		<div class="col-12 mb-3">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Buscar producto..." id="searchInput" />
-				<button class="btn btn-primary" id="searchButton">
-					<i class="bi bi-search"></i> Buscar
-				</button>
-			</div>
-		</div>
-	</div>
+    <!-- Barra de búsqueda -->
+    <div class="row">
+        <div class="col-12 mb-3">
+            <div class="input-group shadow-sm">
+                <input type="text" class="form-control" placeholder="Buscar producto..." id="searchInput" />
 
-	<div class="row">
-		<!-- Grilla de productos -->
-		<div class="col-8">
-			<h4>Productos</h4>
-			<div class="row" id="grillaProductos">
-				@foreach (var producto in Model)
-				{
-					<div class="col-4 mb-3 producto"
-						 data-nombre="@producto.Nombre"
-						 data-codigo="@producto.Codigo">
-						<div class="card">
-							<img src="@producto.thumbnail_url" class="card-img-top" style="max-height:200px" alt="@producto.Nombre">
-							<div class="card-body">
-								<h5 class="card-title">@producto.Nombre</h5>
-								<p class="card-text">Q.@producto.Precio</p>
-								<button class="btn btn-success w-100 add-to-cart"
-										data-id="@producto.ProductoId"
-										data-nombre="@producto.Nombre"
-										data-precio="@producto.Precio">
-									<i class="bi bi-cart-plus"></i> Agregar
-								</button>
-							</div>
-						</div>
-					</div>
-				}
-			</div>
-		</div>
+            </div>
+        </div>
+    </div>
 
-		<!-- Carrito -->
-		<div class="col-4">
-			<h4>Carrito</h4>
-			<div class="list-group" id="cart">
-			</div>
-			<div class="mt-3">
-				<h5>Total: <span id="total"></span> </h5>
-				<button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#finalizarCompra">
-					<i class="bi bi-cash"></i> Finalizar Compra
-				</button>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <!-- Grilla de productos -->
+        <div class="col-lg-8">
+            <h4 class="text-dark">Productos</h4>
+            <div class="row g-3" id="grillaProductos">
+                @foreach (var producto in Model)
+                {
+                    <div class="col-md-6 col-lg-4 producto" 
+                         data-nombre="@producto.Nombre" 
+                         data-codigo="@producto.Codigo">
+                        <div class="card shadow-sm h-100">
+                            <img src="@producto.thumbnail_url" class="card-img-top" style="max-height:200px" alt="@producto.Nombre">
+                            <div class="card-body">
+                                <h5 class="card-title text-truncate">@producto.Nombre</h5>
+                                <p class="card-text fw-bold text-dark">Q.@producto.Precio</p>
+                                <button class="btn btn-success w-100 add-to-cart" 
+                                        style="background-color: rgb(27, 75, 170); border-color: rgb(19, 52, 118); color: white;" 
+                                        data-id="@producto.ProductoId" 
+                                        data-nombre="@producto.Nombre" 
+                                        data-precio="@producto.Precio">
+                                    <i class="bi bi-cart-plus"></i> Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Carrito -->
+        <div class="col-lg-4">
+            <h4 class="text-dark">Mi Carrito</h4>
+            <div class="list-group overflow-auto" style="max-height: 400px;" id="cart">
+                <!-- Items del carrito -->
+            </div>
+            <div class="mt-3">
+                <h5 class="d-flex justify-content-between">
+                    <span>Total:</span>
+                    <span id="total" class="text-dark fw-bold"></span>
+                </h5>
+                <button class="btn btn-primary w-100 mt-3" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#finalizarCompra"
+                        style="background-color: rgb(27, 75, 170); border-color: rgb(19, 52, 118); color: white;" >
+                    <i class="bi bi-cash"></i> Finalizar Compra
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- Modal para finalizar compra -->
 <div class="modal fade" id="finalizarCompra" tabindex="-1" aria-labelledby="finalizarCompraLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="finalizarCompraLabel">Finalizar Compra</h1>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<form id="formularioFinalizarCompra">
-					<div class="mb-3">
-						<label for="cliente" class="form-label">Seleccione al Cliente</label>
-						<select class="form-select" id="cliente" name="cliente" required onchange="actualizarNit()">
-							<option value="">Seleccione ...</option>
-							@foreach (var cliente in ViewBag.Clientes as List<SistemaPOS.Models.Cliente>)
-							{
-								<option value="@cliente.ClienteId" data-nit="@cliente.Nit">@cliente.Nombre</option>
-							}
-						</select>
-					</div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: #f8f9fa;">
+                <h1 class="modal-title fs-5 text-dark" id="finalizarCompraLabel">Finalizar Compra</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formularioFinalizarCompra">
+                    <div class="mb-3">
+                        <label for="cliente" class="form-label">Seleccione al Cliente</label>
+                        <select class="form-select" id="cliente" name="cliente" required onchange="actualizarNit()">
+                            <option value="">Seleccione ...</option>
+                            @foreach (var cliente in ViewBag.Clientes as List<SistemaPOS.Models.Cliente>)
+                            {
+                                <option value="@cliente.ClienteId" data-nit="@cliente.Nit">@cliente.Nombre</option>
+                            }
+                        </select>
+                    </div>
 
-					<div class="mb-3">
-						<label for="empleado" class="form-label">Seleccione al Empleado</label>
-						<select class="form-select" id="empleado" name="empleado" required>
-							<option value="">Seleccione ...</option>
-							@foreach (var empleado in ViewBag.Empleados as List<SistemaPOS.Models.Empleado>)
-							{
-								<option value="@empleado.EmpleadoId">@empleado.Nombre</option>
-							}
-						</select>
-					</div>
-					<!-- Input de NIT -->
-					<input type="text" id="nit" placeholder="NIT del cliente" readonly />
-					<!-- Checkbox para seleccionar CF -->
-					<label>
-					<input type="checkbox" id="usarCF" /> Usar NIT de Consumidor Final (CF)
-					</label>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-				<button type="button" class="btn btn-primary" id="botonFinalizarCompra" onclick="finalizarCompra()">Finalizar</button>
-			</div>
-		</div>
-	</div>
+                    <div class="mb-3">
+                        <label for="empleado" class="form-label">Seleccione al Empleado</label>
+                        <select class="form-select" id="empleado" name="empleado" required>
+                            <option value="">Seleccione ...</option>
+                            @foreach (var empleado in ViewBag.Empleados as List<SistemaPOS.Models.Empleado>)
+                            {
+                                <option value="@empleado.EmpleadoId">@empleado.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="nit" class="form-label">NIT del Cliente</label>
+                        <input type="text" id="nit" class="form-control" placeholder="NIT del cliente" readonly />
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="usarCF" />
+                        <label class="form-check-label" for="usarCF">
+                            Usar NIT de Consumidor Final (CF)
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="botonFinalizarCompra" onclick="finalizarCompra()">Finalizar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -130,8 +146,7 @@
 		});
 	}
 
-	// Agregar eventos al botón y al campo de texto
-	searchButton.addEventListener('click', filtrarProductos); 
+
     searchInput.addEventListener('input', filtrarProductos);  // Buscar mientras se escribe
 
 	document.getElementById('usarCF').addEventListener('change', function () {
@@ -152,32 +167,38 @@
 	const elementoTotal = document.getElementById('total');
 
 	function actualizarCarrito() {
-		contenedorCarrito.innerHTML = '';
-		let total = 0;
+    contenedorCarrito.innerHTML = '';
+    let total = 0;
 
-		carrito.forEach((item) => {
-			const nuevoElemento = document.createElement('div');
-			nuevoElemento.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center')
-			nuevoElemento.innerHTML = `
-						${item.nombre}
-						<span class="badge bg-primary rounded-pill">
-							${item.cantidad} x Q.${item.precio.toFixed(2)} = Q.${(item.cantidad * item.precio).toFixed(2)}
-						</span>
-						<div>
-							<button class="btn btn-sm btn-secondary decrement-item" data-id="${item.id}">
-								<i class="bi bi-dash-circle"></i>
-							</button>
-								<button class="btn btn-sm btn-danger remove-item" data-id="${item.id}">
-								<i class="bi bi-trash"></i>
-							</button>
-						</div>
-					`
-			contenedorCarrito.appendChild(nuevoElemento)
-			total += item.cantidad * item.precio
-		})
+    carrito.forEach((item) => {
+        const nuevoElemento = document.createElement('div');
+        nuevoElemento.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center', 'shadow-sm', 'py-3');
 
-		elementoTotal.textContent = `Q.${total.toFixed(2)}`
-	}
+        nuevoElemento.innerHTML = `
+            <div class="d-flex flex-column">
+                <span class="fw-bold">${item.nombre}</span>
+                <small class="text-muted">${item.cantidad} x Q.${item.precio.toFixed(2)}</small>
+            </div>
+            <div class="d-flex align-items-center">
+                <span class="badge bg-primary text-white fs-6 me-3">
+                    Q.${(item.cantidad * item.precio).toFixed(2)}
+                </span>
+                <button class="btn btn-sm btn-outline-secondary decrement-item mx-1 shadow-sm" data-id="${item.id}">
+                    <i class="bi bi-dash-circle"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger remove-item mx-1 shadow-sm" data-id="${item.id}">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        `;
+
+        contenedorCarrito.appendChild(nuevoElemento);
+        total += item.cantidad * item.precio;
+    });
+
+    elementoTotal.textContent = `Q.${total.toFixed(2)}`;
+}
+
 
 	document.getElementById('grillaProductos').addEventListener('click', function (e) {
 		if (e.target.closest('.add-to-cart')) {

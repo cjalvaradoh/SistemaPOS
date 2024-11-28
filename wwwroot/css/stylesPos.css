@@ -1,1 +1,43 @@
-﻿
+﻿@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap');
+
+.banner {
+    margin-top: 20px;
+}
+
+.banner-img {
+    width: 100%; 
+    height: 260px; 
+    object-fit: cover; 
+    object-position: center; 
+}
+
+.container .row {
+    margin-top: 20px; 
+}
+
+/* Contenedor de la barra de búsqueda e ícono */
+.d-flex {
+    display: flex;
+    align-items: center; /* Alinea verticalmente el contenido */
+}
+
+    /* Espacio entre el input y el icono */
+    .d-flex .form-control {
+        margin-right: 50px; /* Ajusta el espacio entre el campo de búsqueda y el ícono */
+    }
+
+    /* Ícono */
+    .d-flex .bi-basket {
+        font-size: 35px; /* Ajusta el tamaño del ícono */
+    }
+
+/* Forzar la prioridad de los estilos */
+.container .d-flex {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.container .form-control {
+    margin-right: 15px !important; /* Asegura el espacio entre el campo de búsqueda y el ícono */
+}
+

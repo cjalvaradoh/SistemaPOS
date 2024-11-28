@@ -68,7 +68,7 @@ namespace SistemaPOS
 
             app.MapControllerRoute(
              name: "default",
-            pattern: "{controller=Pos}/{action=Index}/{id?}");
+            pattern: "{controller=Auth}/{action=login}/{id?}");
 
 
             app.UseSession();

@@ -22,7 +22,7 @@ namespace SistemaPOS.Controllers
 			return View();
 		}
 
-		public IActionResult ImprimirFactura(long id,string nitCliente)
+		public IActionResult ImprimirFactura(long id, string nitCliente)
 		{
 			QuestPDF.Settings.License = LicenseType.Community;
 
@@ -348,5 +348,6 @@ namespace SistemaPOS.Controllers
 			return Ok(new { VentaId = nuevaVenta.Id });
 		}
 	}
+
 }
 

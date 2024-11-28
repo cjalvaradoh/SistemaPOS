@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "D1YGIOm51QlqbTkKIhh57HKw1riUgt5qSB66Li7Usm0=",
+  "Hash": "/f/zguQcqrHyw1zo+5ocVVNXnaMEY8LSrnNj5pgWWN8=",
   "Source": "SistemaPOS",
   "BasePath": "_content/SistemaPOS",
   "Mode": "Default",
@@ -319,6 +319,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\icons\\apple-touch-icon-76x76.png"
+    },
+    {
+      "Identity": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\images\\banner.jpg",
+      "SourceId": "SistemaPOS",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\",
+      "BasePath": "_content/SistemaPOS",
+      "RelativePath": "images/banner.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\banner.jpg"
     },
     {
       "Identity": "C:\\Users\\Ces\\source\\repos\\SistemaPOS\\wwwroot\\images\\cube_logo_white.jpg",

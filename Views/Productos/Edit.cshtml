@@ -37,13 +37,11 @@
                 <input asp-for="Stock" class="form-control" />
                 <span asp-validation-for="Stock" class="text-danger"></span>
             </div>
+            <!-- Campo para subir una nueva imagen -->
             <div class="form-group">
-                <label for="Imagen">Actualizar Imagen</label>
-                <input type="file" asp-for="FotoUrl" class="form-control" name="Imagen" />
-                @if (Model.FotoUrl != null)
-                {
-                    <img src="@Model.FotoUrl" alt="Producto" class="img-thumbnail mt-2" style="max-width: 150px;" />
-                }
+                <label for="FotoUrl">Subir una nueva imagen (opcional):</label>
+                <input type="file" name="FotoUrl" id="FotoUrl" class="form-control" />
+                <span asp-validation-for="FotoUrl" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Guardar</button>
             <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
